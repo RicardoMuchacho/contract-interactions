@@ -7,12 +7,13 @@ contract Result {
     address public admin;
     uint256 public fee = 5;
 
-    constructor(){
-        admin = msg.sender;
+    constructor(address _admin){
+        admin = _admin;
     }
 
     modifier onlyAdmin() {
-      if (tx.origin != admin) revert();
+         require(tx.origin == admin, "msg.sender is not admin"); // is like an if + revert() 
+    //   if (tx.origin != admin) revert();
       _;
     }
 
