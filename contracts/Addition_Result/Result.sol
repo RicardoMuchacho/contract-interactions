@@ -2,6 +2,8 @@
 
 pragma solidity 0.8.24;
 
+error feeError(address sender);
+
 contract Result {
     uint256 public result = 0;
     address public admin;
@@ -12,8 +14,8 @@ contract Result {
     }
 
     modifier onlyAdmin() {
-         require(tx.origin == admin, "msg.sender is not admin"); // is like an if + revert() 
-    //   if (tx.origin != admin) revert();
+         require(tx.origin == admin, "msg.sender is not admin"); // require: is like an if + revert() 
+    //   if (tx.origin != admin) revert(); // if + revert
       _;
     }
 
@@ -22,6 +24,11 @@ contract Result {
     }
 
     function changeFee(uint256 n) public onlyAdmin {
+       fee = n;
+    }
+
+    function changeFeeCustomError(uint256 n) public {
+       if (msg.sender !=admin) revert feeError(msg.sender); //custom error
        fee = n;
     }
 }
